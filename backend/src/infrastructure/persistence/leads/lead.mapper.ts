@@ -9,7 +9,7 @@ export class LeadMapper {
   /**
    * Convert TypeORM entity to Domain entity
    */
-  static toDomain(entity: LeadEntity): Lead | null {
+  static toDomain(entity: LeadEntity | null | undefined): Lead | null {
     if (!entity) return null;
 
     return new Lead({
@@ -27,7 +27,7 @@ export class LeadMapper {
   /**
    * Convert Domain entity to TypeORM entity
    */
-  static toInfrastructure(domain: Lead): LeadEntity | null {
+  static toInfrastructure(domain: Lead | null | undefined): LeadEntity | null {
     if (!domain) return null;
 
     const entity = new LeadEntity();

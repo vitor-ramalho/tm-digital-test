@@ -13,7 +13,7 @@ export class LeadResponseDto {
   municipality: string;
   createdAt: Date;
   updatedAt: Date;
-  
+
   /**
    * Indicates if this lead has at least one high priority property (> 100 hectares)
    * Useful for frontend visual indicators

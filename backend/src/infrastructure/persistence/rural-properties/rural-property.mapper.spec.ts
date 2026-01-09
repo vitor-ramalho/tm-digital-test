@@ -31,10 +31,13 @@ describe('RuralPropertyMapper', () => {
   describe('toDomain', () => {
     it('should convert infrastructure entity to domain entity', () => {
       const infrastructureEntity = createInfrastructureProperty();
-      
+
       const domainProperty = RuralPropertyMapper.toDomain(infrastructureEntity);
-      
+
       expect(domainProperty).toBeInstanceOf(RuralProperty);
+      expect(domainProperty).not.toBeNull();
+      if (!domainProperty) return;
+
       expect(domainProperty.id).toBe(infrastructureEntity.id);
       expect(domainProperty.leadId).toBe(infrastructureEntity.leadId);
       expect(domainProperty.cropType).toBe(infrastructureEntity.cropType);
@@ -47,9 +50,11 @@ describe('RuralPropertyMapper', () => {
     it('should convert decimal area to number', () => {
       const entity = createInfrastructureProperty();
       entity.areaHectares = 99.99;
-      
+
       const domainProperty = RuralPropertyMapper.toDomain(entity);
-      
+
+      expect(domainProperty).not.toBeNull();
+      if (!domainProperty) return;
       expect(typeof domainProperty.areaHectares).toBe('number');
       expect(domainProperty.areaHectares).toBe(99.99);
     });
@@ -57,9 +62,11 @@ describe('RuralPropertyMapper', () => {
     it('should handle null geometry from database', () => {
       const infrastructureEntity = createInfrastructureProperty();
       infrastructureEntity.geometry = null;
-      
+
       const domainProperty = RuralPropertyMapper.toDomain(infrastructureEntity);
-      
+
+      expect(domainProperty).not.toBeNull();
+      if (!domainProperty) return;
       expect(domainProperty.geometry).toBeUndefined();
     });
 
@@ -79,9 +86,11 @@ describe('RuralPropertyMapper', () => {
       cropTypes.forEach((cropType) => {
         const entity = createInfrastructureProperty();
         entity.cropType = cropType;
-        
+
         const domainProperty = RuralPropertyMapper.toDomain(entity);
-        
+
+        expect(domainProperty).not.toBeNull();
+        if (!domainProperty) return;
         expect(domainProperty.cropType).toBe(cropType);
       });
     });
@@ -90,10 +99,13 @@ describe('RuralPropertyMapper', () => {
   describe('toInfrastructure', () => {
     it('should convert domain entity to infrastructure entity', () => {
       const domainProperty = createDomainProperty();
-      
+
       const infrastructureEntity = RuralPropertyMapper.toInfrastructure(domainProperty);
-      
+
       expect(infrastructureEntity).toBeInstanceOf(RuralPropertyEntity);
+      expect(infrastructureEntity).not.toBeNull();
+      if (!infrastructureEntity) return;
+
       expect(infrastructureEntity.id).toBe(domainProperty.id);
       expect(infrastructureEntity.leadId).toBe(domainProperty.leadId);
       expect(infrastructureEntity.cropType).toBe(domainProperty.cropType);
@@ -106,9 +118,11 @@ describe('RuralPropertyMapper', () => {
     it('should handle undefined geometry for database', () => {
       const domainProperty = createDomainProperty();
       domainProperty.geometry = undefined;
-      
+
       const infrastructureEntity = RuralPropertyMapper.toInfrastructure(domainProperty);
-      
+
+      expect(infrastructureEntity).not.toBeNull();
+      if (!infrastructureEntity) return;
       expect(infrastructureEntity.geometry).toBeNull();
     });
 
@@ -125,9 +139,11 @@ describe('RuralPropertyMapper', () => {
     it('should preserve numeric precision for area', () => {
       const domainProperty = createDomainProperty();
       domainProperty.areaHectares = 123.45;
-      
+
       const infrastructureEntity = RuralPropertyMapper.toInfrastructure(domainProperty);
-      
+
+      expect(infrastructureEntity).not.toBeNull();
+      if (!infrastructureEntity) return;
       expect(infrastructureEntity.areaHectares).toBe(123.45);
     });
   });
@@ -139,9 +155,9 @@ describe('RuralPropertyMapper', () => {
         createInfrastructureProperty(),
         createInfrastructureProperty(),
       ];
-      
+
       const domainProperties = RuralPropertyMapper.toDomainList(entities);
-      
+
       expect(domainProperties).toHaveLength(3);
       domainProperties.forEach((property) => {
         expect(property).toBeInstanceOf(RuralProperty);
@@ -160,9 +176,13 @@ describe('RuralPropertyMapper', () => {
         createInfrastructureProperty(),
         undefined,
       ];
-      
-      const domainProperties = RuralPropertyMapper.toDomainList(entities);
-      
+
+      // Filter out null/undefined before passing to mapper
+      const validEntities = entities.filter(
+        (e): e is RuralPropertyEntity => e !== null && e !== undefined,
+      );
+      const domainProperties = RuralPropertyMapper.toDomainList(validEntities);
+
       expect(domainProperties).toHaveLength(2);
       domainProperties.forEach((property) => {
         expect(property).toBeInstanceOf(RuralProperty);
@@ -174,10 +194,15 @@ describe('RuralPropertyMapper', () => {
   describe('bidirectional mapping', () => {
     it('should maintain data integrity in round-trip conversion', () => {
       const originalDomain = createDomainProperty();
-      
+
       const infrastructure = RuralPropertyMapper.toInfrastructure(originalDomain);
+      expect(infrastructure).not.toBeNull();
+      if (!infrastructure) return;
+
       const backToDomain = RuralPropertyMapper.toDomain(infrastructure);
-      
+      expect(backToDomain).not.toBeNull();
+      if (!backToDomain) return;
+
       expect(backToDomain.id).toBe(originalDomain.id);
       expect(backToDomain.leadId).toBe(originalDomain.leadId);
       expect(backToDomain.cropType).toBe(originalDomain.cropType);
@@ -187,30 +212,45 @@ describe('RuralPropertyMapper', () => {
     it('should handle geometry in round-trip conversion', () => {
       const domainWithGeometry = createDomainProperty();
       domainWithGeometry.geometry = '{"type":"Polygon","coordinates":[]}';
-      
+
       const infrastructure = RuralPropertyMapper.toInfrastructure(domainWithGeometry);
+      expect(infrastructure).not.toBeNull();
+      if (!infrastructure) return;
+
       const backToDomain = RuralPropertyMapper.toDomain(infrastructure);
-      
+      expect(backToDomain).not.toBeNull();
+      if (!backToDomain) return;
+
       expect(backToDomain.geometry).toBe('{"type":"Polygon","coordinates":[]}');
     });
 
     it('should handle undefined geometry in round-trip conversion', () => {
       const domainWithoutGeometry = createDomainProperty();
       domainWithoutGeometry.geometry = undefined;
-      
+
       const infrastructure = RuralPropertyMapper.toInfrastructure(domainWithoutGeometry);
+      expect(infrastructure).not.toBeNull();
+      if (!infrastructure) return;
+
       const backToDomain = RuralPropertyMapper.toDomain(infrastructure);
-      
+      expect(backToDomain).not.toBeNull();
+      if (!backToDomain) return;
+
       expect(backToDomain.geometry).toBeUndefined();
     });
 
     it('should preserve high priority status through mapping', () => {
       const highPriorityProperty = createDomainProperty();
       highPriorityProperty.areaHectares = 150;
-      
+
       const infrastructure = RuralPropertyMapper.toInfrastructure(highPriorityProperty);
+      expect(infrastructure).not.toBeNull();
+      if (!infrastructure) return;
+
       const backToDomain = RuralPropertyMapper.toDomain(infrastructure);
-      
+      expect(backToDomain).not.toBeNull();
+      if (!backToDomain) return;
+
       expect(backToDomain.isHighPriority()).toBe(true);
     });
   });

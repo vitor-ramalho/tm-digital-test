@@ -9,7 +9,7 @@ export class RuralPropertyMapper {
   /**
    * Convert TypeORM entity to Domain entity
    */
-  static toDomain(entity: RuralPropertyEntity): RuralProperty | null {
+  static toDomain(entity: RuralPropertyEntity | null | undefined): RuralProperty | null {
     if (!entity) return null;
 
     return new RuralProperty({
@@ -26,7 +26,7 @@ export class RuralPropertyMapper {
   /**
    * Convert Domain entity to TypeORM entity
    */
-  static toInfrastructure(domain: RuralProperty): RuralPropertyEntity | null {
+  static toInfrastructure(domain: RuralProperty | null | undefined): RuralPropertyEntity | null {
     if (!domain) return null;
 
     const entity = new RuralPropertyEntity();
