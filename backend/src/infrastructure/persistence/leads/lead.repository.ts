@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere, ILike } from 'typeorm';
+import { Repository, FindOptionsWhere } from 'typeorm';
 import { LeadEntity } from './lead.entity';
 import { LeadMapper } from './lead.mapper';
 import { Lead } from '@domain/leads/lead.entity';

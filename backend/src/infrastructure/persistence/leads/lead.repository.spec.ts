@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository, SelectQueryBuilder } from 'typeorm';
+import { Repository } from 'typeorm';
 import { LeadRepository } from './lead.repository';
 import { LeadEntity } from './lead.entity';
 import { LeadMapper } from './lead.mapper';
@@ -49,9 +49,7 @@ describe('LeadRepository', () => {
     }).compile();
 
     repository = module.get<LeadRepository>(LeadRepository);
-    typeormRepository = module.get<Repository<LeadEntity>>(
-      getRepositoryToken(LeadEntity),
-    );
+    typeormRepository = module.get<Repository<LeadEntity>>(getRepositoryToken(LeadEntity));
 
     // Reset all mocks before each test
     jest.clearAllMocks();
@@ -76,10 +74,9 @@ describe('LeadRepository', () => {
 
       const result = await repository.findAll({ status: LeadStatus.NEGOTIATION });
 
-      expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
-        'lead.status = :status',
-        { status: LeadStatus.NEGOTIATION },
-      );
+      expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith('lead.status = :status', {
+        status: LeadStatus.NEGOTIATION,
+      });
       expect(result).toHaveLength(1);
       expect(result[0].status).toBe(LeadStatus.NEGOTIATION);
     });
@@ -90,10 +87,9 @@ describe('LeadRepository', () => {
 
       const result = await repository.findAll({ municipality: 'Uberaba' });
 
-      expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
-        'lead.municipality = :municipality',
-        { municipality: 'Uberaba' },
-      );
+      expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith('lead.municipality = :municipality', {
+        municipality: 'Uberaba',
+      });
       expect(result).toHaveLength(1);
     });
 
@@ -292,10 +288,9 @@ describe('LeadRepository', () => {
 
       const result = await repository.existsByCpf('123.456.789-01');
 
-      expect(mockQueryBuilder.where).toHaveBeenCalledWith(
-        'lead.cpf = :cpf',
-        { cpf: '12345678901' },
-      );
+      expect(mockQueryBuilder.where).toHaveBeenCalledWith('lead.cpf = :cpf', {
+        cpf: '12345678901',
+      });
       expect(result).toBe(true);
     });
 
@@ -312,10 +307,9 @@ describe('LeadRepository', () => {
 
       await repository.existsByCpf('123.456.789-01', 'uuid-exclude');
 
-      expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
-        'lead.id != :id',
-        { id: 'uuid-exclude' },
-      );
+      expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith('lead.id != :id', {
+        id: 'uuid-exclude',
+      });
     });
   });
 
@@ -356,9 +350,7 @@ describe('LeadRepository', () => {
         'lead.properties',
         'property',
       );
-      expect(mockQueryBuilder.where).toHaveBeenCalledWith(
-        'property.area_hectares > 100',
-      );
+      expect(mockQueryBuilder.where).toHaveBeenCalledWith('property.area_hectares > 100');
       expect(result).toHaveLength(1);
     });
   });

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere, MoreThan, LessThanOrEqual, Between } from 'typeorm';
+import { Repository, FindOptionsWhere, MoreThan } from 'typeorm';
 import { RuralPropertyEntity } from './rural-property.entity';
 import { RuralPropertyMapper } from './rural-property.mapper';
 import { RuralProperty } from '@domain/rural-properties/rural-property.entity';
