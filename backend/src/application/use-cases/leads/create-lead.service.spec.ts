@@ -4,7 +4,6 @@ import { CreateLeadService } from './create-lead.service';
 import { LeadRepository } from '@infrastructure/persistence/leads/lead.repository';
 import { Lead } from '@domain/leads/lead.entity';
 import { LeadStatus } from '@domain/leads/lead-status.enum';
-import { Cpf } from '@domain/leads/cpf.value-object';
 
 describe('CreateLeadService', () => {
   let service: CreateLeadService;
