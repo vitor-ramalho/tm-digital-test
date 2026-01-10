@@ -17,9 +17,7 @@ export class GetLeadService {
     return lead;
   }
 
-  async getWithPropertiesCount(
-    id: string,
-  ): Promise<{ lead: Lead; propertiesCount: number }> {
+  async getWithPropertiesCount(id: string): Promise<{ lead: Lead; propertiesCount: number }> {
     const result = await this.leadRepository.findByIdWithPropertiesCount(id);
     if (!result) {
       throw new NotFoundException(`Lead with ID ${id} not found`);
