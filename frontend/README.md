@@ -4,6 +4,8 @@
 
 This is the Angular frontend application for the TM Digital Test project, an agricultural input distributor lead management system for Minas Gerais, Brazil.
 
+> 📖 **Para instruções completas de setup do projeto (incluindo backend e banco de dados), veja o [README principal](../README.md)**
+
 ## Technology Stack
 
 - **Angular**: 17.3.12
