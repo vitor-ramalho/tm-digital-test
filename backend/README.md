@@ -94,9 +94,36 @@ src/
 
 - **Node.js** >= 18.x
 - **npm** >= 9.x
-- **PostgreSQL** >= 14.x
+- **Docker** and **Docker Compose** (para PostgreSQL)
 
 ## Environment Setup
+
+### 1. Start PostgreSQL with Docker Compose
+
+Na raiz do projeto (pasta pai), execute:
+
+```bash
+docker-compose up -d
+```
+
+Isso iniciará o PostgreSQL com as seguintes configurações:
+- **Host:** localhost
+- **Port:** 5432
+- **User:** postgres
+- **Password:** postgres
+- **Database:** tm_database
+
+Para verificar se está rodando:
+```bash
+docker-compose ps
+```
+
+Para ver os logs do PostgreSQL:
+```bash
+docker-compose logs -f postgres
+```
+
+### 2. Configure Environment Variables
 
 1. **Copy environment template:**
    ```bash
@@ -118,6 +145,8 @@ src/
    TYPEORM_LOGGING=true
    ```
 
+> ⚠️ **Importante:** Certifique-se de que `DB_DATABASE=tm_database` está configurado corretamente para corresponder ao banco criado pelo Docker Compose.
+
 ## Installation
 
 1. **Install dependencies:**
@@ -125,14 +154,7 @@ src/
    npm install
    ```
 
-2. **Create PostgreSQL database:**
-   ```bash
-   psql -U postgres
-   CREATE DATABASE tm_digital_db;
-   \q
-   ```
-
-3. **Run migrations:**
+2. **Run migrations:**
    ```bash
    npm run migration:run
    ```
@@ -252,6 +274,37 @@ Represents agricultural land owned/managed by a lead.
 
 **Priority Indicator:**
 - Properties with `areaHectares > 100` are considered high priority
+
+## Docker Commands
+
+### Starting the Database
+```bash
+# Na raiz do projeto (pasta pai)
+docker-compose up -d
+```
+
+### Checking Database Status
+```bash
+docker-compose ps
+docker-compose logs -f postgres
+```
+
+### Stopping the Database
+```bash
+# Parar sem remover dados
+docker-compose stop
+
+# Parar e remover containers (dados persistem no volume)
+docker-compose down
+
+# Parar e remover tudo incluindo volumes (⚠️ apaga dados)
+docker-compose down -v
+```
+
+### Accessing PostgreSQL CLI
+```bash
+docker-compose exec postgres psql -U postgres -d tm_database
+```
 
 ## License
 
