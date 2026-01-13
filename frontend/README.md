@@ -86,9 +86,7 @@ ng build --configuration production
 
 ## Documentation
 
-- [ANGULAR-SETUP.md](../ANGULAR-SETUP.md) - Setup guide
-- [ANGULAR-FOLDER-STRUCTURE.md](../ANGULAR-FOLDER-STRUCTURE.md) - Architecture details
-- [API.md](../API.md) - Backend API reference
+- [README.md](../backend/README.md) - Backend API reference
 
 ## License
 
