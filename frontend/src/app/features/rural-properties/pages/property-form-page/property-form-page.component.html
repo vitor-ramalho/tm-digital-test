@@ -1,0 +1,135 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>{{ isEditMode ? 'Editar Propriedade' : 'Nova Propriedade Rural' }}</h1>
+    <p class="page-subtitle">
+      {{ isEditMode ? 'Atualize as informações da propriedade' : 'Cadastre uma nova propriedade rural' }}
+    </p>
+  </div>
+
+  <p-card>
+    <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
+      <div class="p-fluid grid">
+        <!-- Lead -->
+        <div class="col-12">
+          <div class="field">
+            <label for="leadId" class="block mb-2">
+              Lead <span class="text-red-500">*</span>
+            </label>
+            <p-dropdown
+              id="leadId"
+              formControlName="leadId"
+              [options]="leads"
+              optionLabel="displayLabel"
+              optionValue="id"
+              placeholder="Selecione o lead proprietário"
+              [filter]="true"
+              filterBy="name,municipality"
+              [style]="{'width': '100%'}"
+              [class.ng-invalid]="isFieldInvalid('leadId')"
+              [class.ng-dirty]="isFieldInvalid('leadId')"
+            ></p-dropdown>
+            <small *ngIf="isFieldInvalid('leadId')" class="p-error">
+              {{ getFieldError('leadId') }}
+            </small>
+          </div>
+        </div>
+
+        <!-- Crop Type -->
+        <div class="col-12 md:col-6">
+          <div class="field">
+            <label for="cropType" class="block mb-2">
+              Tipo de Cultura <span class="text-red-500">*</span>
+            </label>
+            <p-dropdown
+              id="cropType"
+              formControlName="cropType"
+              [options]="cropOptions"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Selecione o tipo de cultura"
+              [style]="{'width': '100%'}"
+            ></p-dropdown>
+          </div>
+        </div>
+
+        <!-- Area -->
+        <div class="col-12 md:col-6">
+          <div class="field">
+            <label for="areaHectares" class="block mb-2">
+              Área (hectares) <span class="text-red-500">*</span>
+            </label>
+            <p-inputNumber
+              id="areaHectares"
+              formControlName="areaHectares"
+              mode="decimal"
+              [minFractionDigits]="2"
+              [maxFractionDigits]="2"
+              [min]="0.01"
+              placeholder="0.00"
+              suffix=" ha"
+              [style]="{'width': '100%'}"
+              [class.ng-invalid]="isFieldInvalid('areaHectares')"
+              [class.ng-dirty]="isFieldInvalid('areaHectares')"
+            ></p-inputNumber>
+            <small *ngIf="isFieldInvalid('areaHectares')" class="p-error">
+              {{ getFieldError('areaHectares') }}
+            </small>
+            <small *ngIf="!isFieldInvalid('areaHectares') && currentAreaHectares > 0" class="block mt-2">
+              <app-priority-indicator
+                [areaHectares]="currentAreaHectares"
+                [showLabel]="true"
+              ></app-priority-indicator>
+              <span *ngIf="!isPriorityProperty" class="text-600 ml-2">
+                (Área informada: {{ currentAreaHectares }} ha)
+              </span>
+            </small>
+          </div>
+        </div>
+
+        <!-- Geometry -->
+        <div class="col-12">
+          <div class="field">
+            <label for="geometry" class="block mb-2">
+              Geometria (Opcional)
+            </label>
+            <textarea
+              pInputTextarea
+              id="geometry"
+              formControlName="geometry"
+              placeholder="Cole aqui os dados geográficos da propriedade (GeoJSON, WKT, etc.)"
+              [rows]="5"
+              [autoResize]="true"
+            ></textarea>
+            <small class="text-600">
+              <i class="pi pi-info-circle mr-1"></i>
+              Formato aceito: GeoJSON, WKT ou texto descritivo. Não é necessário para visualização em mapa.
+            </small>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="col-12">
+          <div class="flex gap-2 justify-content-end mt-3">
+            <p-button
+              label="Cancelar"
+              icon="pi pi-times"
+              severity="secondary"
+              [outlined]="true"
+              (onClick)="onCancel()"
+              [disabled]="loading"
+            ></p-button>
+            <p-button
+              label="{{ isEditMode ? 'Atualizar' : 'Salvar' }}"
+              icon="pi pi-check"
+              type="submit"
+              [loading]="loading"
+              [disabled]="loading"
+            ></p-button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </p-card>
+</div>
+
+<p-toast></p-toast>

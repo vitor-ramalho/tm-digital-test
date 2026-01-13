@@ -1,0 +1,17 @@
+::ng-deep .status-tag {
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  display: inline-flex;
+  align-items: center;
+
+  .p-tag-icon {
+    font-size: 0.625rem;
+    margin-right: 0.375rem;
+  }
+
+  .p-tag-value {
+    line-height: 1;
+  }
+}

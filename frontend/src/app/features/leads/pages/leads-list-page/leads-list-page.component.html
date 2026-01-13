@@ -1,0 +1,186 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1>Leads</h1>
+      <p class="page-subtitle">Gerencie seus leads e oportunidades de negócio</p>
+    </div>
+    <button
+      pButton
+      label="Novo Lead"
+      icon="pi pi-plus"
+      (click)="createLead()"
+      class="p-button-primary">
+    </button>
+  </div>
+
+  <!-- Filters Card -->
+  <p-card styleClass="filters-card">
+    <div class="filters-container">
+      <div class="filter-group">
+        <label for="search">Buscar</label>
+        <span class="p-input-icon-left w-full">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            id="search"
+            type="text"
+            [(ngModel)]="searchTerm"
+            placeholder="Buscar por nome, CPF ou município..."
+            class="w-full" />
+        </span>
+      </div>
+
+      <div class="filter-group">
+        <label for="status">Status</label>
+        <p-dropdown
+          id="status"
+          [options]="statusOptions"
+          [(ngModel)]="selectedStatus"
+          (onChange)="onFilterChange()"
+          placeholder="Todos os Status"
+          [showClear]="true"
+          styleClass="w-full">
+        </p-dropdown>
+      </div>
+
+      <div class="filter-actions">
+        <button
+          pButton
+          label="Filtrar"
+          icon="pi pi-filter"
+          (click)="loadLeads()"
+          class="p-button-outlined">
+        </button>
+        <button
+          pButton
+          label="Limpar"
+          icon="pi pi-times"
+          (click)="clearFilters()"
+          class="p-button-outlined p-button-secondary">
+        </button>
+      </div>
+    </div>
+  </p-card>
+
+  <!-- Leads Table -->
+  <p-card styleClass="table-card">
+    <p-table
+      [value]="leads"
+      [loading]="loading"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [globalFilterFields]="['name', 'cpf', 'municipality']"
+      [(first)]="first"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} leads"
+      responsiveLayout="scroll">
+
+      <!-- Empty State -->
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="empty-state">
+            <div class="empty-state-content">
+              <i class="pi pi-users empty-icon"></i>
+              <h3>Nenhum lead encontrado</h3>
+              <p>Comece criando seu primeiro lead ou ajuste os filtros</p>
+              <button
+                pButton
+                label="Criar Lead"
+                icon="pi pi-plus"
+                (click)="createLead()">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <!-- Table Header -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="name" style="min-width: 200px;">
+            Nome <p-sortIcon field="name"></p-sortIcon>
+          </th>
+          <th pSortableColumn="cpf" style="min-width: 150px;">
+            CPF <p-sortIcon field="cpf"></p-sortIcon>
+          </th>
+          <th pSortableColumn="municipality" style="min-width: 180px;">
+            Município <p-sortIcon field="municipality"></p-sortIcon>
+          </th>
+          <th pSortableColumn="status" style="min-width: 160px;">
+            Status <p-sortIcon field="status"></p-sortIcon>
+          </th>
+          <th pSortableColumn="createdAt" style="min-width: 140px;">
+            Criado em <p-sortIcon field="createdAt"></p-sortIcon>
+          </th>
+          <th style="width: 160px; text-align: center;">Ações</th>
+        </tr>
+      </ng-template>
+
+      <!-- Table Body -->
+      <ng-template pTemplate="body" let-lead>
+        <tr>
+          <td>
+            <strong>{{ lead.name }}</strong>
+          </td>
+          <td>
+            <span class="text-secondary">{{ formatCPF(lead.cpf) }}</span>
+          </td>
+          <td>
+            <i class="pi pi-map-marker text-primary"></i>
+            {{ lead.municipality }}
+          </td>
+          <td>
+            <app-status-badge [status]="lead.status"></app-status-badge>
+          </td>
+          <td>
+            <span class="text-secondary">{{ formatDate(lead.createdAt) }}</span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-eye"
+                class="p-button-rounded p-button-text p-button-info"
+                (click)="viewLead(lead)"
+                pTooltip="Visualizar"
+                tooltipPosition="top">
+              </button>
+              <button
+                pButton
+                type="button"
+                icon="pi pi-pencil"
+                class="p-button-rounded p-button-text p-button-warning"
+                (click)="editLead(lead)"
+                pTooltip="Editar"
+                tooltipPosition="top">
+              </button>
+              <button
+                pButton
+                type="button"
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-text p-button-danger"
+                (click)="deleteLead(lead)"
+                pTooltip="Excluir"
+                tooltipPosition="top">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>
+
+<!-- Toast Messages -->
+<p-toast></p-toast>
+
+<!-- Confirmation Dialog -->
+<p-confirmDialog
+  [style]="{width: '450px'}"
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+

@@ -1,0 +1,9 @@
+<span
+  *ngIf="isPriority"
+  class="priority-badge"
+  [pTooltip]="priorityMessage"
+  tooltipPosition="top"
+>
+  <i class="pi pi-star-fill"></i>
+  <span *ngIf="showLabel" class="ml-1">Prioritário</span>
+</span>

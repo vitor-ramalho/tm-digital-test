@@ -1,0 +1,134 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>{{ isEditMode ? 'Editar Lead' : 'Novo Lead' }}</h1>
+    <p class="page-subtitle">
+      {{ isEditMode ? 'Atualize as informações do lead' : 'Cadastre um novo lead no sistema' }}
+    </p>
+  </div>
+
+  <p-card>
+    <form [formGroup]="leadForm" (ngSubmit)="onSubmit()">
+      <div class="p-fluid grid">
+        <!-- Nome -->
+        <div class="col-12 md:col-6">
+          <div class="field">
+            <label for="name" class="block mb-2">
+              Nome Completo <span class="text-red-500">*</span>
+            </label>
+            <input
+              pInputText
+              id="name"
+              formControlName="name"
+              placeholder="Digite o nome completo"
+              [class.ng-invalid]="isFieldInvalid('name')"
+              [class.ng-dirty]="isFieldInvalid('name')"
+            />
+            <small *ngIf="isFieldInvalid('name')" class="p-error">
+              {{ getFieldError('name') }}
+            </small>
+          </div>
+        </div>
+
+        <!-- CPF -->
+        <div class="col-12 md:col-6">
+          <div class="field">
+            <label for="cpf" class="block mb-2">
+              CPF <span class="text-red-500">*</span>
+            </label>
+            <input
+              pInputText
+              id="cpf"
+              formControlName="cpf"
+              placeholder="000.000.000-00"
+              maxlength="14"
+              (input)="onCpfInput($event)"
+              [class.ng-invalid]="isFieldInvalid('cpf')"
+              [class.ng-dirty]="isFieldInvalid('cpf')"
+            />
+            <small *ngIf="isFieldInvalid('cpf')" class="p-error">
+              {{ getFieldError('cpf') }}
+            </small>
+          </div>
+        </div>
+
+        <!-- Município -->
+        <div class="col-12 md:col-6">
+          <div class="field">
+            <label for="municipality" class="block mb-2">
+              Município <span class="text-red-500">*</span>
+            </label>
+            <input
+              pInputText
+              id="municipality"
+              formControlName="municipality"
+              placeholder="Digite o município"
+              [class.ng-invalid]="isFieldInvalid('municipality')"
+              [class.ng-dirty]="isFieldInvalid('municipality')"
+            />
+            <small *ngIf="isFieldInvalid('municipality')" class="p-error">
+              {{ getFieldError('municipality') }}
+            </small>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="col-12 md:col-6">
+          <div class="field">
+            <label for="status" class="block mb-2">
+              Status <span class="text-red-500">*</span>
+            </label>
+            <p-dropdown
+              id="status"
+              formControlName="status"
+              [options]="statusOptions"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Selecione o status"
+              [style]="{'width': '100%'}"
+            ></p-dropdown>
+          </div>
+        </div>
+
+        <!-- Comentários -->
+        <div class="col-12">
+          <div class="field">
+            <label for="comments" class="block mb-2">
+              Comentários
+            </label>
+            <textarea
+              pInputTextarea
+              id="comments"
+              formControlName="comments"
+              placeholder="Observações adicionais sobre o lead"
+              [rows]="5"
+              [autoResize]="true"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="col-12">
+          <div class="flex gap-2 justify-content-end mt-3">
+            <p-button
+              label="Cancelar"
+              icon="pi pi-times"
+              severity="secondary"
+              [outlined]="true"
+              (onClick)="onCancel()"
+              [disabled]="loading"
+            ></p-button>
+            <p-button
+              label="{{ isEditMode ? 'Atualizar' : 'Salvar' }}"
+              icon="pi pi-check"
+              type="submit"
+              [loading]="loading"
+              [disabled]="loading"
+            ></p-button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </p-card>
+</div>
+
+<p-toast></p-toast>

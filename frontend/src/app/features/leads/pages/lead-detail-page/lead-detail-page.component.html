@@ -1,0 +1,135 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="flex justify-content-between align-items-center">
+      <div>
+        <h1>Detalhes do Lead</h1>
+        <p class="page-subtitle">Visualize as informações completas do lead</p>
+      </div>
+      <div class="flex gap-2">
+        <p-button
+          label="Voltar"
+          icon="pi pi-arrow-left"
+          severity="secondary"
+          [outlined]="true"
+          (onClick)="onBack()"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+
+  <p-card *ngIf="!loading && lead">
+    <!-- Lead Actions -->
+    <ng-template pTemplate="header">
+      <div class="flex justify-content-between align-items-center px-3 pt-3">
+        <div>
+          <h2 class="m-0">{{ lead.name }}</h2>
+          <p class="text-600 mt-1 mb-0">{{ formatCPF(lead.cpf) }}</p>
+        </div>
+        <div class="flex gap-2">
+          <p-button
+            label="Editar"
+            icon="pi pi-pencil"
+            severity="warning"
+            (onClick)="onEdit()"
+          ></p-button>
+          <p-button
+            label="Excluir"
+            icon="pi pi-trash"
+            severity="danger"
+            [outlined]="true"
+            (onClick)="onDelete()"
+          ></p-button>
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- Lead Information -->
+    <div class="grid">
+      <div class="col-12 md:col-6">
+        <div class="field-display">
+          <label>Nome Completo</label>
+          <p>{{ lead.name }}</p>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-6">
+        <div class="field-display">
+          <label>CPF</label>
+          <p>{{ formatCPF(lead.cpf) }}</p>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-6">
+        <div class="field-display">
+          <label>Município</label>
+          <p>
+            <i class="pi pi-map-marker text-primary"></i>
+            {{ lead.municipality }}
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-6">
+        <div class="field-display">
+          <label>Status</label>
+          <div>
+            <app-status-badge [status]="lead.status"></app-status-badge>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-6">
+        <div class="field-display">
+          <label>Data de Criação</label>
+          <p>
+            <i class="pi pi-calendar text-primary"></i>
+            {{ formatDate(lead.createdAt) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-6">
+        <div class="field-display">
+          <label>Última Atualização</label>
+          <p>
+            <i class="pi pi-clock text-primary"></i>
+            {{ formatDate(lead.updatedAt) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12" *ngIf="lead.comments">
+        <p-divider></p-divider>
+        <div class="field-display">
+          <label>Comentários</label>
+          <p class="comment-text">{{ lead.comments }}</p>
+        </div>
+      </div>
+    </div>
+  </p-card>
+
+  <!-- Loading State -->
+  <p-card *ngIf="loading">
+    <div class="flex justify-content-center align-items-center" style="min-height: 300px;">
+      <i class="pi pi-spin pi-spinner" style="font-size: 3rem; color: var(--primary-color);"></i>
+    </div>
+  </p-card>
+
+  <!-- Empty State -->
+  <p-card *ngIf="!loading && !lead">
+    <div class="flex flex-column align-items-center justify-content-center" style="min-height: 300px;">
+      <i class="pi pi-exclamation-triangle" style="font-size: 4rem; color: var(--orange-500);"></i>
+      <h3 class="mt-4">Lead não encontrado</h3>
+      <p class="text-600">O lead que você está procurando não existe ou foi removido.</p>
+      <p-button
+        label="Voltar para a lista"
+        icon="pi pi-arrow-left"
+        (onClick)="onBack()"
+        class="mt-3"
+      ></p-button>
+    </div>
+  </p-card>
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>

@@ -1,0 +1,261 @@
+.page-container {
+  padding: var(--spacing-lg);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-xl);
+  gap: var(--spacing-md);
+
+  h1 {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0 0 var(--spacing-xs) 0;
+  }
+
+  .page-subtitle {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  button {
+    white-space: nowrap;
+  }
+}
+
+// Filters Card
+.filters-card {
+  margin-bottom: var(--spacing-lg);
+
+  ::ng-deep .p-card-body {
+    padding: var(--spacing-lg);
+  }
+}
+
+.filters-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: var(--spacing-md);
+  align-items: end;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+
+  label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .p-input-icon-left {
+    width: 100%;
+
+    input {
+      width: 100%;
+    }
+  }
+}
+
+.filter-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+
+  @media (max-width: 768px) {
+    margin-top: var(--spacing-sm);
+  }
+}
+
+// Table Card
+.table-card {
+  ::ng-deep .p-card-body {
+    padding: 0;
+  }
+
+  ::ng-deep .p-datatable {
+    .p-datatable-header {
+      background: var(--surface-section);
+      border-bottom: 1px solid var(--surface-border);
+      padding: var(--spacing-md);
+    }
+
+    .p-datatable-thead > tr > th {
+      background: var(--gray-50);
+      color: var(--text-color);
+      font-weight: 600;
+      font-size: var(--font-size-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: var(--spacing-md);
+      border-bottom: 2px solid var(--surface-border);
+    }
+
+    .p-datatable-tbody > tr {
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: var(--gray-50);
+      }
+
+      > td {
+        padding: var(--spacing-md);
+        color: var(--text-color);
+        font-size: var(--font-size-sm);
+        vertical-align: middle;
+
+        strong {
+          font-weight: 600;
+          color: var(--text-color);
+        }
+      }
+    }
+
+    // Striped rows
+    .p-datatable-tbody > tr:nth-child(even) {
+      background-color: var(--gray-50);
+
+      &:hover {
+        background-color: var(--gray-100);
+      }
+    }
+  }
+
+  // Paginator
+  ::ng-deep .p-paginator {
+    background: var(--surface-section);
+    border-top: 1px solid var(--surface-border);
+    padding: var(--spacing-md);
+
+    .p-paginator-current {
+      color: var(--text-secondary);
+      font-size: var(--font-size-sm);
+    }
+
+    .p-paginator-pages .p-paginator-page {
+      min-width: 2.5rem;
+      height: 2.5rem;
+      color: var(--text-color);
+      border-radius: var(--border-radius-md);
+
+      &.p-highlight {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      &:not(.p-highlight):hover {
+        background: var(--gray-100);
+      }
+    }
+  }
+}
+
+// Action Buttons
+.action-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+
+  ::ng-deep button {
+    width: 2.5rem;
+    height: 2.5rem;
+
+    &.p-button-info {
+      color: var(--info);
+
+      &:hover {
+        background: rgba(59, 130, 246, 0.1);
+      }
+    }
+
+    &.p-button-warning {
+      color: var(--warning);
+
+      &:hover {
+        background: rgba(245, 158, 11, 0.1);
+      }
+    }
+
+    &.p-button-danger {
+      color: var(--danger);
+
+      &:hover {
+        background: rgba(239, 68, 68, 0.1);
+      }
+    }
+  }
+}
+
+// Empty State
+.empty-state {
+  padding: var(--spacing-2xl) var(--spacing-md);
+  text-align: center;
+
+  .empty-state-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-xl) 0;
+
+    .empty-icon {
+      font-size: 4rem;
+      color: var(--gray-300);
+    }
+
+    h3 {
+      font-size: var(--font-size-xl);
+      font-weight: 600;
+      color: var(--text-color);
+      margin: 0;
+    }
+
+    p {
+      font-size: var(--font-size-base);
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    button {
+      margin-top: var(--spacing-md);
+    }
+  }
+}
+
+// Municipality with icon
+td i.pi-map-marker {
+  margin-right: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .page-container {
+    padding: var(--spacing-md);
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .action-buttons {
+    justify-content: flex-start;
+  }
+}

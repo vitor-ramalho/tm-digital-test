@@ -1,0 +1,54 @@
+.field-display {
+  margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    i {
+      font-size: 1.1rem;
+    }
+  }
+
+  .comment-text {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    background-color: var(--surface-100);
+    padding: 1rem;
+    border-radius: 6px;
+    border-left: 3px solid var(--primary-color);
+  }
+}
+
+// Header actions on small screens
+@media (max-width: 768px) {
+  .page-header {
+    .flex {
+      flex-direction: column;
+      align-items: flex-start !important;
+      gap: 1rem;
+    }
+  }
+
+  ::ng-deep .p-card-header {
+    .flex {
+      flex-direction: column;
+      align-items: flex-start !important;
+      gap: 1rem;
+    }
+  }
+}

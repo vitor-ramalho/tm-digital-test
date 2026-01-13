@@ -1,0 +1,265 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1><i class="pi pi-chart-line mr-2"></i>Dashboard</h1>
+    <p class="page-subtitle">Visão geral do sistema de gestão de leads</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="grid">
+    <div class="col-12 md:col-6 lg:col-3" *ngFor="let i of [1,2,3,4]">
+      <p-card>
+        <p-skeleton height="100px"></p-skeleton>
+      </p-card>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div *ngIf="!loading && statistics" class="grid">
+    <!-- Total Leads -->
+    <div class="col-12 md:col-6 lg:col-3">
+      <p-card styleClass="stat-card stat-card--primary">
+        <div class="flex align-items-center justify-content-between">
+          <div>
+            <div class="stat-value">{{ statistics.totalLeads }}</div>
+            <div class="stat-label">Total de Leads</div>
+          </div>
+          <div class="stat-icon stat-icon--primary">
+            <i class="pi pi-users"></i>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- New Leads -->
+    <div class="col-12 md:col-6 lg:col-3">
+      <p-card styleClass="stat-card stat-card--success">
+        <div class="flex align-items-center justify-content-between">
+          <div>
+            <div class="stat-value">{{ statistics.newLeads }}</div>
+            <div class="stat-label">Leads Novos</div>
+          </div>
+          <div class="stat-icon stat-icon--success">
+            <i class="pi pi-user-plus"></i>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- In Negotiation -->
+    <div class="col-12 md:col-6 lg:col-3">
+      <p-card styleClass="stat-card stat-card--warning">
+        <div class="flex align-items-center justify-content-between">
+          <div>
+            <div class="stat-value">{{ statistics.leadsInNegotiation }}</div>
+            <div class="stat-label">Em Negociação</div>
+          </div>
+          <div class="stat-icon stat-icon--warning">
+            <i class="pi pi-comments"></i>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Converted Leads -->
+    <div class="col-12 md:col-6 lg:col-3">
+      <p-card styleClass="stat-card stat-card--info">
+        <div class="flex align-items-center justify-content-between">
+          <div>
+            <div class="stat-value">{{ statistics.convertedLeads }}</div>
+            <div class="stat-label">Convertidos</div>
+          </div>
+          <div class="stat-icon stat-icon--info">
+            <i class="pi pi-check-circle"></i>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div *ngIf="!loading && statusChartData && municipalityChartData" class="grid mt-4">
+    <!-- Leads by Status Chart -->
+    <div class="col-12 lg:col-6">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="px-3 pt-3">
+            <h3 class="m-0">
+              <i class="pi pi-chart-pie mr-2 text-primary"></i>
+              Leads por Status
+            </h3>
+            <p class="text-600 mt-1 mb-0">Distribuição dos leads por status atual</p>
+          </div>
+        </ng-template>
+        <div class="chart-container">
+          <p-chart
+            type="pie"
+            [data]="statusChartData"
+            [options]="statusChartOptions"
+            [style]="{'width': '100%'}"
+          ></p-chart>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Leads by Municipality Chart -->
+    <div class="col-12 lg:col-6">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="px-3 pt-3">
+            <h3 class="m-0">
+              <i class="pi pi-map-marker mr-2 text-primary"></i>
+              Leads por Município
+            </h3>
+            <p class="text-600 mt-1 mb-0">Top 10 municípios com mais leads</p>
+          </div>
+        </ng-template>
+        <div class="chart-container" style="height: 400px;">
+          <p-chart
+            type="bar"
+            [data]="municipalityChartData"
+            [options]="municipalityChartOptions"
+            [style]="{'width': '100%', 'height': '100%'}"
+          ></p-chart>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <!-- Priority Leads Table -->
+  <div *ngIf="!loading && priorityLeads.length > 0" class="grid mt-4">
+    <div class="col-12">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="px-3 pt-3">
+            <div class="flex justify-content-between align-items-center">
+              <div>
+                <h3 class="m-0">
+                  <i class="pi pi-star-fill mr-2 text-yellow-500"></i>
+                  Leads Prioritários
+                </h3>
+                <p class="text-600 mt-1 mb-0">Leads com propriedades acima de 100 hectares</p>
+              </div>
+              <p-button
+                label="Ver Todos"
+                icon="pi pi-arrow-right"
+                [outlined]="true"
+                routerLink="/leads"
+                [queryParams]="{priority: 'true'}"
+              ></p-button>
+            </div>
+          </div>
+        </ng-template>
+
+        <p-table
+          [value]="priorityLeads"
+          [paginator]="priorityLeads.length > 5"
+          [rows]="5"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} leads"
+          [rowsPerPageOptions]="[5, 10, 25]"
+          styleClass="p-datatable-sm"
+          [responsive]="true"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="name">
+                Nome <p-sortIcon field="name"></p-sortIcon>
+              </th>
+              <th pSortableColumn="municipality">
+                Município <p-sortIcon field="municipality"></p-sortIcon>
+              </th>
+              <th pSortableColumn="status">
+                Status <p-sortIcon field="status"></p-sortIcon>
+              </th>
+              <th pSortableColumn="totalArea" class="text-right">
+                Área Total <p-sortIcon field="totalArea"></p-sortIcon>
+              </th>
+              <th pSortableColumn="propertyCount" class="text-center">
+                Propriedades <p-sortIcon field="propertyCount"></p-sortIcon>
+              </th>
+              <th class="text-center">Ações</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-lead>
+            <tr>
+              <td>
+                <div class="flex align-items-center gap-2">
+                  <i class="pi pi-star-fill text-yellow-500" style="font-size: 0.9rem;"></i>
+                  <strong>{{ lead.name }}</strong>
+                </div>
+              </td>
+              <td>
+                <i class="pi pi-map-marker text-primary mr-2"></i>
+                {{ lead.municipality }}
+              </td>
+              <td>
+                <app-status-badge [status]="lead.status"></app-status-badge>
+              </td>
+              <td class="text-right">
+                <span class="font-semibold text-primary">
+                  {{ lead.totalArea | number:'1.2-2' }} ha
+                </span>
+              </td>
+              <td class="text-center">
+                <p-tag
+                  [value]="lead.propertyCount.toString()"
+                  severity="info"
+                  [rounded]="true"
+                ></p-tag>
+              </td>
+              <td class="text-center">
+                <div class="flex gap-2 justify-content-center">
+                  <p-button
+                    icon="pi pi-eye"
+                    severity="info"
+                    [rounded]="true"
+                    [text]="true"
+                    [routerLink]="['/leads/detail', lead.id]"
+                    pTooltip="Ver detalhes"
+                    tooltipPosition="top"
+                  ></p-button>
+                  <p-button
+                    icon="pi pi-pencil"
+                    severity="warning"
+                    [rounded]="true"
+                    [text]="true"
+                    [routerLink]="['/leads/edit', lead.id]"
+                    pTooltip="Editar"
+                    tooltipPosition="top"
+                  ></p-button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" class="text-center py-5">
+                <i class="pi pi-info-circle text-400" style="font-size: 3rem;"></i>
+                <p class="text-600 mt-3 mb-0">Nenhum lead prioritário encontrado</p>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && !statistics" class="grid">
+    <div class="col-12">
+      <p-card>
+        <div class="flex flex-column align-items-center justify-content-center py-5">
+          <i class="pi pi-chart-line" style="font-size: 4rem; color: var(--gray-400);"></i>
+          <h3 class="mt-4">Nenhum dado disponível</h3>
+          <p class="text-600">Comece cadastrando leads para visualizar o dashboard.</p>
+          <p-button
+            label="Cadastrar Lead"
+            icon="pi pi-plus"
+            routerLink="/leads/new"
+            class="mt-3"
+          ></p-button>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>

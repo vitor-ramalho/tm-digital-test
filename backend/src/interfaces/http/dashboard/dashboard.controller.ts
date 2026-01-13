@@ -14,6 +14,8 @@ import { GetRuralPropertyStatisticsService } from '@application/use-cases/rural-
  * - GET /dashboard/properties - Property-specific statistics
  * - GET /dashboard/leads/by-status - Leads grouped by status
  * - GET /dashboard/leads/by-municipality - Leads grouped by municipality
+ * - GET /dashboard/properties/by-crop-type - Properties grouped by crop type
+ * - GET /dashboard/insights - Dashboard insights and KPIs
  */
 @Controller('dashboard')
 export class DashboardController {
@@ -84,5 +86,31 @@ export class DashboardController {
   async getLeadsByMunicipality() {
     const stats = await this.getLeadStatisticsService.getMunicipalityStatistics();
     return stats;
+  }
+
+  /**
+   * GET /dashboard/properties/by-crop-type
+   * Get properties grouped by crop type
+   * Optimized query: SELECT cropType, COUNT(*), SUM(areaHectares) GROUP BY cropType
+   * @returns Array of crop types with counts and total area
+   */
+  @Get('properties/by-crop-type')
+  @HttpCode(HttpStatus.OK)
+  async getPropertiesByCropType() {
+    const stats = await this.getRuralPropertyStatisticsService.getCropTypeStatistics();
+    return stats;
+  }
+
+  /**
+   * GET /dashboard/insights
+   * Get dashboard insights and KPIs
+   * Includes conversion rate, top municipality, average properties per lead
+   * @returns Dashboard insights
+   */
+  @Get('insights')
+  @HttpCode(HttpStatus.OK)
+  async getInsights() {
+    const dashboard = await this.getDashboardStatisticsService.execute();
+    return dashboard.insights;
   }
 }

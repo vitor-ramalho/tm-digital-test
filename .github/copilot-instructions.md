@@ -148,6 +148,7 @@ Represents a rural property owned or managed by a lead.
 - Apply **class-validator** for input validation
 - Use migrations for database schema
 - Implement proper error handling and HTTP status codes
+- All code must be covered by unitary tests
 
 ---
 

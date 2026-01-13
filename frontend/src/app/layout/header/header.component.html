@@ -1,0 +1,26 @@
+<header class="app-header">
+  <div class="header-content">
+    <!-- Logo and Brand -->
+    <div class="brand" routerLink="/dashboard">
+      <i class="pi pi-chart-bar brand-icon"></i>
+      <div class="brand-text">
+        <span class="brand-name">TM Digital</span>
+        <span class="brand-subtitle">Gestão de Leads</span>
+      </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="main-nav">
+      <p-menubar [model]="menuItems" styleClass="app-menubar">
+        <ng-template pTemplate="end">
+          <div class="header-actions">
+            <!-- Optional: Add user profile, notifications, etc. -->
+            <i class="pi pi-bell header-icon"
+               pBadge
+               severity="info"></i>
+          </div>
+        </ng-template>
+      </p-menubar>
+    </nav>
+  </div>
+</header>

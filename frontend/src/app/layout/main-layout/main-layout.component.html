@@ -1,0 +1,31 @@
+<div class="main-layout">
+  <!-- Header -->
+  <app-header></app-header>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <div class="content-wrapper">
+      <!-- Breadcrumb could go here if needed -->
+
+      <!-- Router Outlet - Where pages render -->
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <p class="footer-text">
+          © {{ currentYear }} TM Digital Test - Gestão de Leads para Distribuidora de Insumos Agrícolas
+        </p>
+      </div>
+      <div class="footer-right">
+        <span class="footer-badge">
+          <i class="pi pi-map-marker"></i>
+          Minas Gerais, Brasil
+        </span>
+      </div>
+    </div>
+  </footer>
+</div>
